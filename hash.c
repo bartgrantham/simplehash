@@ -79,11 +79,12 @@ void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth)
         // had any entries, then we need to make sure to set the key to null
         // !!! don't attempt to free the string though, it points to hash_next_magic !!!
         if ( (*h)[i].value ==  NULL ) {  (*h)[i].key = NULL;  }
+        if ( hash_entries((*h)) == 0 ) {  free(*h);  *h = NULL;  }
         return deleted_val;
     }
 
-    // key found: free the key I stored away, set the key and value pointers to NULL, return the deleted value pointer
-    if ( strcmp((*h)[i].key, key) == 0 )  // found it 
+    // key found: free the key I stored, set the key and value pointers to NULL, return the deleted value pointer
+    if ( strcmp((*h)[i].key, key) == 0 )
     {
         deleted_val = (*h)[i].value;
         free((*h)[i].key);
@@ -94,7 +95,7 @@ void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth)
         return deleted_val;
     }
 
-    return NULL;
+    return HASH_DELETE_FAILED;
 }
 
 

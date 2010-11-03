@@ -7,14 +7,11 @@
 
 #define HASH_KEYS_PER_TABLE 31
 #define HASH_INITIAL_SALT 10000001
-#define HASH_INSERT_FAILED 1
-#define HASH_INSERT 2
-#define HASH_UPDATE_FAILED 3
-#define HASH_UPDATE 4
-#define HASH_DELETE_FAILED 5
-#define HASH_DELETE 6
 #define HASH_NEXT_MAGIC "\0__OUR_PRINCESS_IS_IN_ANOTHER_CASTLE__";
-//char hash_next_magic[] = HASH_NEXT_MAGIC;
+#define HASH_INSERT_FAILED -1
+#define HASH_INSERT -2
+#define HASH_UPDATE -3
+#define HASH_DELETE_FAILED NULL
 
 struct hash_entry
 {
@@ -22,10 +19,12 @@ struct hash_entry
     void * value;  /* Could be another hash... */
 } hash_entry;
 
+
 #define hash_set(h, k, v) hash_set_depth(&(h), k, v, 0)
 #define hash_get(h, k)    hash_get_depth(h, k, 0)
 #define hash_clear(h, k)  hash_clear_depth(&(h), k, 0)
 #define hash_dump(h)      hash_dump_depth(h, 0)
+
 
 int    hash(const char * key, int salt);
 

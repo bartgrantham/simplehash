@@ -16,16 +16,6 @@ int main(int argc, char * argv[])
     bzero(testwords, KEYS_IN_FLIGHT * sizeof(char*));
     words = fopen("/usr/share/dict/words", "r");
 
-/*
-    // fill it up with all dict words
-    while ( fgets(buf, sizeof(buf)-1, words) )
-    {
-        j = strlen(buf);
-        buf[j-1] = '\0';
-        hash_set(myhash, buf, NULL);
-    }
-*/
-
     // rotate words in and out of the hash tables...
     while ( fgets(buf, sizeof(buf)-1, words) )
     {

@@ -8,31 +8,34 @@ why not just use hcreate/hsearch/hdestroy?:
 questions:
 - is it ok that hash_get returns a NULL for failure-to-find?  It means that storing a NULL pointer is invalid...
 - on that note, do I need a hash_clear?  Would it be better to do hash_set(h, k, NULL) instead?
-- should I choose a different HASH_NEXT_MAGIC?  Maybe start it with a \0 char?
 - would an sdbm-derived hash (used in berkleydb for example) be better?
 
 limitations:
 - hash algo isn't cryptographically sound, meaning vuln to ddos... all hashes are, of course
-- without recursing the hash tables on a clear I can end up with a bunch of empty tables at the end
+- doesn't rebalance, so sometimes a heavily used hash will not be optimally organized
 
 todo:
-- rigorously test mem performance (do I leak?  what's my max pointer at any given time?)
-- is my code cache-friendly?  (for example, hash_stats always compares against hash_next_magic, which keeps it in L1)
+- rigorously test mem performance (do I leak?)
+- audit:
+- is my code cache-friendly?  (for example, good: hash_stats always compares against hash_next_magic, which keeps it in L1)
 - vigorously test hash_clear and hash_get... make big test cases...
 - HASH_MAX_KEYSIZE in order to use strncmp and play nice with OpenBSD
 - hash_map(): takes a function and runs it against all the elements in the hash (depth first, breadth first too?)
     see l_mapt from http://www.pasteit4me.com/46003,http://www.pasteit4me.com/46002,http://www.pasteit4me.com/45003
+    this could also provide hash_destroy() and hash_copy()
 - hash_value(): given a void *, find the first string that is the key for it (requires a full search)
-- hash_map_value(): combination of the two above ideas: depth first search for a value that causes the map fcn to return true
+- hash_map_key(), hash_map_value(): combination of the two above ideas: depth first search for a value that causes the map fcn to return true
 - hash_copy(): this would be a simple solution to the "sparseness" problem.
 - why does hash_next_magic refuse to be defined in hash.h (end up with "duplicate symbols")
 - advanced feature: vararg hash_set and hash_get: hash_set_varg("New York", "New York City", "Grantham", "Bart", &user)
 
 before publishing:
+- rename test to -example
 - better/less/clearer constant defines...
 - is there a typedef'ing that I should be doing here?
 - gather more data and integrate into test suite...
 - graphs showing
     - hash statistical randomness
     - optimal number of hash entries for sparseness, mem utilization, and speed
-    - memory performance (fragmentation and maximum pointer value) vs. num hash_entries
+    - test suite should automatically test 1000's upon 1000's of variable-length random strings
+    - use clocks() to map out length of inserts/lookups/deletes
