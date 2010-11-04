@@ -116,14 +116,8 @@ come to life just get all the files and:
 # ./hash_example
 
 
-License
--------
-MIT License.  See ./LICENSE or http://www.opensource.org/licenses/mit-license.php
-
-
 Todo
 ----
-
 Audit:
     - is my code cache-friendly?  (for example, good: hash_stats always compares against hash_next_magic, which keeps it in L1)
     - rigorously test mem performance
@@ -146,4 +140,25 @@ New features:
 Outstanding questions:
     - Would an sdbm-derived hash be better?
 
+
+Bugs, etc.
+----------
+Please let me know if you find any, or if you have license-friendly
+enhancements to add.
+
+
+License
+-------
+MIT License.  See ./LICENSE or
+http://www.opensource.org/licenses/mit-license.php
+
+Few things are more enjoyable than the knowledge that you've helped another
+person. If you do use these functions for anything, I'd love to hear about it:
+
+bart@bartgrantham.com
+
+
+Enjoy!
+
+-Bart
 
