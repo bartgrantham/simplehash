@@ -6,9 +6,9 @@ clean:
 	rm -f $(ALL)
 
 hash_test: hash.o hash_test.c
-	$(CC) $^ -o $@
+	$(CC) hash.o hash_test.c -o $@
 
 hash_example: hash.o hash_example.c
-	$(CC) $^ -o $@
+	$(CC) hash.o hash_example.c -o $@
 
 hash.o: hash.h
