@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <time.h>
-#include <math.h>
 
 #ifdef __linux
 #define TIMESTART clock_gettime(CLOCK_REALTIME, &tp_start);
