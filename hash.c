@@ -1,6 +1,7 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+/*  Licensed under the MIT License by Bart Grantham, 2010.  See ./LICENSE or
+ *  http://www.opensource.org/licenses/mit-license.php
+ */
+
 #include "hash.h"
 
 char hash_next_magic[] = HASH_NEXT_MAGIC;

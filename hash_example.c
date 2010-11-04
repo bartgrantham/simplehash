@@ -1,5 +1,7 @@
+/*  Licensed under the MIT License by Bart Grantham, 2010.  See ./LICENSE or
+ *  http://www.opensource.org/licenses/mit-license.php
+ */
 #include "hash.h"
-#include <stdio.h>
 #include <fcntl.h>
 
 #define KEYS_IN_FLIGHT 1000

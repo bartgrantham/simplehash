@@ -116,6 +116,11 @@ come to life just get all the files and:
 # ./hash_example
 
 
+License
+-------
+MIT License.  See ./LICENSE or http://www.opensource.org/licenses/mit-license.php
+
+
 Todo
 ----
 
@@ -140,3 +145,5 @@ New features:
 
 Outstanding questions:
     - Would an sdbm-derived hash be better?
+
+
