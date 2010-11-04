@@ -26,7 +26,7 @@ extern "C" {
 #define HASH_UPDATE -4
 #define HASH_DELETE_FAILED NULL
 
-struct hash_entry
+typedef struct
 {
     char * key;
     void * value;  /* Could be another hash... */
@@ -41,23 +41,23 @@ struct hash_entry
 
 int    hash(const char * key, int salt);
 
-void * hash_get_depth(struct hash_entry h[], const char * key, int depth);
+void * hash_get_depth(hash_entry h[], const char * key, int depth);
 
-int    hash_set_depth(struct hash_entry * h[], const char * key, const void * value, int depth);
+int    hash_set_depth(hash_entry * h[], const char * key, const void * value, int depth);
 
-void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth);
+void * hash_clear_depth(hash_entry * h[], const char * key, int depth);
 
-void   hash_dump_depth(struct hash_entry h[], int depth);
+void   hash_dump_depth(hash_entry h[], int depth);
 
-inline int hash_entries(struct hash_entry h[]);
+inline int hash_entries(hash_entry h[]);
 
-inline struct hash_entry * hash_first_entry(struct hash_entry h[]);
+inline hash_entry * hash_first_entry(hash_entry h[]);
 
-int    hash_depth(struct hash_entry h[]);
+int    hash_depth(hash_entry h[]);
 
-void   hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls, void ** max_ptr);
+void   hash_stats(hash_entry h[], int * tables, int * entries, int * nulls, void ** max_ptr);
 
-double hash_sparseness(struct hash_entry h[]);
+double hash_sparseness(hash_entry h[]);
 
 #endif  // __HASH_H_
 

@@ -8,7 +8,7 @@
 
 int main(int argc, char * argv[])
 {
-    struct hash_entry * myhash = NULL;
+    hash_entry * myhash = NULL;
     FILE * words;
     int i=0, j=0, k=0, l=0, m=0;
     char buf[1024];

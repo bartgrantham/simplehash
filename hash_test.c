@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
     void * tmp_ptr;
     char buffer[1024];
     int freq[HASH_KEYS_PER_TABLE];
-    struct hash_entry * words_hash = NULL;
+    hash_entry * words_hash = NULL;
 #ifdef __linux
     struct timespec tp_start, tp_end;
 #else

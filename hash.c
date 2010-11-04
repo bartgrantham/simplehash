@@ -6,8 +6,8 @@
 
 char hash_next_magic[] = HASH_NEXT_MAGIC;
 
-// NOTE: "(struct hash_entry **)&((*h)[i].value)" should be simplified if I can.  It means:
-// "the address of the 'value' member of the i'th hash_entry struct of the array pointed to by h"
+// NOTE: "(hash_entry **)&((*h)[i].value)" should be simplified if I can.  It means:
+// "the address of the 'value' member of the i'th hash_entry of the array pointed to by h"
 // It is used in three places in this code.
 
 
@@ -35,7 +35,7 @@ inline int hash(const char * key, int round)
 }
 
 
-void * hash_get_depth(struct hash_entry h[], const char * key, int depth)
+void * hash_get_depth(hash_entry h[], const char * key, int depth)
 {
     int keyhash, i;
     keyhash = hash(key, depth);
@@ -60,10 +60,10 @@ void * hash_get_depth(struct hash_entry h[], const char * key, int depth)
 }
 
 
-void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth)
+void * hash_clear_depth(hash_entry * h[], const char * key, int depth)
 {
     int keyhash, i;
-    struct hash_entry * old_hash, * first_entry;
+    hash_entry * old_hash, * first_entry;
     void * deleted_val;
 
     keyhash = hash(key, depth);
@@ -75,7 +75,7 @@ void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth)
     // the value is another hash: call again with this hash
     if ( (*h)[i].key == hash_next_magic )
     {
-        deleted_val = hash_clear_depth((struct hash_entry **)&((*h)[i].value), key, depth+1);
+        deleted_val = hash_clear_depth((hash_entry **)&((*h)[i].value), key, depth+1);
         // subtle: if the hash that we passed in was destroyed because it no longer
         // had any entries, then we need to make sure to set the key to null
         // !!! don't attempt to free the string though, it points to hash_next_magic !!!
@@ -100,7 +100,7 @@ void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth)
 }
 
 
-int hash_set_depth(struct hash_entry * h[], const char * key, const void * value, int depth)
+int hash_set_depth(hash_entry * h[], const char * key, const void * value, int depth)
 {
     int keyhash, i;
     char * tmp_key;
@@ -131,7 +131,7 @@ int hash_set_depth(struct hash_entry * h[], const char * key, const void * value
     // the key for this hash entry is pointing to another hash: insert the value into this sub-hash
     if ( (*h)[i].key == hash_next_magic )
     {
-        return hash_set_depth((struct hash_entry **)&((*h)[i].value), key, value, depth+1);
+        return hash_set_depth((hash_entry **)&((*h)[i].value), key, value, depth+1);
     }
 
     // the key for this hash entry is non-null and is equal to the key parameter: update value
@@ -146,13 +146,13 @@ int hash_set_depth(struct hash_entry * h[], const char * key, const void * value
     tmp_key = (*h)[i].key;  tmp_val = (*h)[i].value;
     (*h)[i].key = hash_next_magic;
     (*h)[i].value = NULL;
-    hash_set_depth((struct hash_entry **)&((*h)[i].value), tmp_key, tmp_val, depth+1);
-    return hash_set_depth((struct hash_entry **)&((*h)[i].value), key, value, depth+1);
+    hash_set_depth((hash_entry **)&((*h)[i].value), tmp_key, tmp_val, depth+1);
+    return hash_set_depth((hash_entry **)&((*h)[i].value), key, value, depth+1);
 }
 
 
 
-inline int hash_entries(struct hash_entry h[])
+inline int hash_entries(hash_entry h[])
 {
     int i = 0, entries = 0;
     for(i=0; i<HASH_KEYS_PER_TABLE; i++)
@@ -163,7 +163,7 @@ inline int hash_entries(struct hash_entry h[])
 }
 
 
-inline struct hash_entry * hash_first_entry(struct hash_entry h[])
+inline hash_entry * hash_first_entry(hash_entry h[])
 {
     int i = 0;
     for(i=0; i<HASH_KEYS_PER_TABLE; i++)
@@ -174,7 +174,7 @@ inline struct hash_entry * hash_first_entry(struct hash_entry h[])
 }
 
 
-int hash_depth(struct hash_entry h[])
+int hash_depth(hash_entry h[])
 {
     int i = 0, temp = 0, max = 0;
     for(i=0; i<HASH_KEYS_PER_TABLE; i++)
@@ -185,7 +185,7 @@ int hash_depth(struct hash_entry h[])
 }
 
 
-void hash_dump_depth(struct hash_entry h[], int depth)
+void hash_dump_depth(hash_entry h[], int depth)
 {
     int i;
     if ( h == NULL ) {  return;  }
@@ -199,7 +199,7 @@ void hash_dump_depth(struct hash_entry h[], int depth)
 }
 
 
-void hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls, void ** max_ptr)
+void hash_stats(hash_entry h[], int * tables, int * entries, int * nulls, void ** max_ptr)
 {
     int i;
     for(i=0; i<HASH_KEYS_PER_TABLE; i++)
@@ -220,7 +220,7 @@ void hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls,
 }
 
 
-double hash_sparseness(struct hash_entry h[])
+double hash_sparseness(hash_entry h[])
 {
     int i=0, j=0, k=0;
     void * max_ptr = NULL;
