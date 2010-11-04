@@ -1,12 +1,20 @@
 /*  Licensed under the MIT License by Bart Grantham, 2010.  See ./LICENSE or
  *  http://www.opensource.org/licenses/mit-license.php
  */
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #ifndef __HASH_H_
 #define __HASH_H_
+
+/*  string.h needed for strcspn() and strlen()  */
+#include <string.h>
+/*  stdio.h  needed for printf() */
+#include <stdio.h>
+/*  stdlib.h needed for malloc() and free()  */
+#include <stdlib.h>
 
 #define HASH_KEYS_PER_TABLE 32
 #define HASH_MAX_KEYSIZE 255
@@ -52,3 +60,8 @@ void   hash_stats(struct hash_entry h[], int * tables, int * entries, int * null
 double hash_sparseness(struct hash_entry h[]);
 
 #endif  // __HASH_H_
+
+
+#ifdef __cplusplus
+}
+#endif
