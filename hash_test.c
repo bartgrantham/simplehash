@@ -4,7 +4,6 @@
 #include "hash.h"
 #include <fcntl.h>
 #include <time.h>
-#include <math.h>
 
 #ifdef __linux
 #define TIMESTART clock_gettime(CLOCK_REALTIME, &tp_start);
@@ -82,7 +81,7 @@ int main(int argc, char * argv[])
     printf("    Predictability (non-static execution, string is \"%s\")...\n", test_string);
     for(i=1; i<=12; i++)
     {
-        l = (int)powl(2,i);
+        l = 2 << i;
         printf("\t\tTesting %d rounds\t : ", l);
         fflush(stdout);
         j = hash(test_string, l);
@@ -93,7 +92,7 @@ int main(int argc, char * argv[])
 
 
     /**** Performance ****/
-    k = 1024*1024*1;
+    k = 2 << 25;
     l = strlen(test_string);
     printf("    Performance (hashing \"%s\" %d times with %d rounds, this may take a bit)...", test_string, k, l);
     fflush(stdout);
@@ -197,10 +196,10 @@ int main(int argc, char * argv[])
     printf("    Testing to see if removing the final entry clears the entire hash...");
     fflush(stdout);
     hash_clear(words_hash, buffer);
-    if ( words_hash == NULL ) {  printf("Yes hash ptr is %p\n", words_hash);  }
+    if ( words_hash == NULL ) {  printf("Yes.  hash pointer is %p\n", words_hash);  }
     else
     {
-        printf("NO!  Running stats...\n");
+        printf("NO!  hash pointer is %p.  Running stats...\n", words_hash);
         i = j = k = 0;
         tmp_ptr = NULL;
         hash_stats(words_hash, &i, &j, &k, &tmp_ptr);
