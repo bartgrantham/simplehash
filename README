@@ -37,7 +37,7 @@ Important things to note:
 - hash_set(myhash, "foo", NULL) doesn't clear the key/value pair from the hash, you
     should use hash_clear(myhash, "foo") for that instead.  The difference is that
     hash_clear() will cascade delete empty hash tables whereas hash_set() does not.
-    This is because "setting" a key/value pair with the value as NULL is semantially
+    This is because setting a key/value pair where the value is NULL is semantially
     different than clearing a key/value pair.
 
 - The hash algorithm is pretty good, but not cryptographically sound.  This means
