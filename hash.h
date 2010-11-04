@@ -5,12 +5,14 @@
 #ifndef __HASH_H_
 #define __HASH_H_
 
-#define HASH_KEYS_PER_TABLE 31
+#define HASH_KEYS_PER_TABLE 32
+#define HASH_MAX_KEYSIZE 255
 #define HASH_INITIAL_SALT 10000001
 #define HASH_NEXT_MAGIC "\0__OUR_PRINCESS_IS_IN_ANOTHER_CASTLE__";
-#define HASH_INSERT_FAILED -1
-#define HASH_INSERT -2
-#define HASH_UPDATE -3
+#define HASH_SELECT_FAILED NULL
+#define HASH_INSERT_FAILED -2
+#define HASH_INSERT -3
+#define HASH_UPDATE -4
 #define HASH_DELETE_FAILED NULL
 
 struct hash_entry
@@ -42,7 +44,7 @@ inline struct hash_entry * hash_first_entry(struct hash_entry h[]);
 
 int    hash_depth(struct hash_entry h[]);
 
-void   hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls, void ** max_pointer);
+void   hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls, void ** max_ptr);
 
 double hash_sparseness(struct hash_entry h[]);
 

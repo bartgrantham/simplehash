@@ -41,7 +41,7 @@ void * hash_get_depth(struct hash_entry h[], const char * key, int depth)
     i = keyhash % HASH_KEYS_PER_TABLE;
 
     // quick short circuit
-    if ( h[i].key == NULL ) {  return NULL;  }
+    if ( h[i].key == NULL ) {  return HASH_SELECT_FAILED;  }
 
     // another hash to look in...
     if ( h[i].key == hash_next_magic )
@@ -50,12 +50,12 @@ void * hash_get_depth(struct hash_entry h[], const char * key, int depth)
     }
 
     // found the key
-    if ( strcmp(h[i].key, key) == 0 )
+    if ( strncmp(h[i].key, key, HASH_MAX_KEYSIZE) == 0 )
     {
         return h[i].value;
     }
 
-    return NULL;
+    return HASH_SELECT_FAILED;
 }
 
 
@@ -84,7 +84,7 @@ void * hash_clear_depth(struct hash_entry * h[], const char * key, int depth)
     }
 
     // key found: free the key I stored, set the key and value pointers to NULL, return the deleted value pointer
-    if ( strcmp((*h)[i].key, key) == 0 )
+    if ( strncmp((*h)[i].key, key, HASH_MAX_KEYSIZE) == 0 )
     {
         deleted_val = (*h)[i].value;
         free((*h)[i].key);
@@ -134,7 +134,7 @@ int hash_set_depth(struct hash_entry * h[], const char * key, const void * value
     }
 
     // the key for this hash entry is non-null and is equal to the key parameter: update value
-    if ( strcmp((*h)[i].key, key) == 0 )
+    if ( strncmp((*h)[i].key, key, HASH_MAX_KEYSIZE) == 0 )
     {
         (*h)[i].value = (void *)value;  return HASH_UPDATE;
     }
@@ -198,7 +198,7 @@ void hash_dump_depth(struct hash_entry h[], int depth)
 }
 
 
-void hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls, void ** max_pointer)
+void hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls, void ** max_ptr)
 {
     int i;
     for(i=0; i<HASH_KEYS_PER_TABLE; i++)
@@ -207,13 +207,13 @@ void hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls,
         else if ( h[i].key == hash_next_magic )
         {
             (*tables)++;
-            if ( h[i].value > *max_pointer ) {  *max_pointer = h[i].value;  }
-            hash_stats(h[i].value, tables, entries, nulls, max_pointer);
+            if ( h[i].value > *max_ptr ) {  *max_ptr = h[i].value;  }
+            hash_stats(h[i].value, tables, entries, nulls, max_ptr);
         }
         else
         {
             (*entries)++;
-            if ( (void *)h[i].key > *max_pointer ) {  *max_pointer = (void *)h[i].key;  }
+            if ( (void *)h[i].key > *max_ptr ) {  *max_ptr = (void *)h[i].key;  }
         }
     }
 }
@@ -222,8 +222,8 @@ void hash_stats(struct hash_entry h[], int * tables, int * entries, int * nulls,
 double hash_sparseness(struct hash_entry h[])
 {
     int i=0, j=0, k=0;
-    void * max_pointer = NULL;
-    hash_stats(h, &i, &j, &k, &max_pointer);
+    void * max_ptr = NULL;
+    hash_stats(h, &i, &j, &k, &max_ptr);
     // the sum of ( tables + non-table entries + nulls ) is the number of key/value pairs
     // the hash has.  The number of nulls divided by this nulls gives 'sparseness', which
     // can be as little as zero and in the most pathological case should never be more than

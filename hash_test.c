@@ -104,10 +104,12 @@ int main(int argc, char * argv[])
     TIMEEND;
     printf("Done %.3fs (%.3f/sec)\n", elapsed, k/elapsed);
 
+    printf("\n");
+
 
 
     /******** Testing hash_*() ********/
-    printf("Testing hash_*()...\n");
+    printf("Testing hash_*() functions...\n");
 
     /**** Load the up a hash with the dictionary ****/
     printf("    Loading new hash with contents of %s [hash_set()]...", dictionary);
@@ -125,6 +127,7 @@ int main(int argc, char * argv[])
     fclose(words);
     TIMEEND;
     printf("Done.  %d entries loaded in %.3fs (%.3f/sec)\n", j, elapsed, j/elapsed);
+
 
     /**** Hash lookup ****/
     printf("    Looking up all entries of the hash [hash_get()]...");
@@ -145,6 +148,7 @@ int main(int argc, char * argv[])
     TIMEEND;
     printf("Done.  %d entries found in %.3fs (%.3f/sec)\n", j, elapsed, j/elapsed);
     l = j;  // number of words... we'll need this later
+
 
     /**** Hash stats ****/
     printf("    Running stats on the hash [hash_stats(), hash_depth(), hash_sparseness()]...\n");
@@ -171,9 +175,12 @@ int main(int argc, char * argv[])
         j++;
         if ( j == l-1 ) {  break;  }
     }
+    fgets(buffer, sizeof(buffer)-1, words);   // should work.. last word in dictionary
+    i = strlen(buffer);  buffer[i-1] = '\0';  // strip the newline
     fclose(words);
     TIMEEND;
     printf("Done.  %d entries cleared in %.3fs (%.3f/sec)\n", j, elapsed, j/elapsed);
+
 
     /**** Hash stats again ****/
     printf("    Running stats on the now almost empty hash [hash_stats(), hash_depth(), hash_sparseness()]...\n");
@@ -184,7 +191,23 @@ int main(int argc, char * argv[])
         hash_depth(words_hash), i, j, k, hash_sparseness(words_hash), tmp_ptr);
 
 
+    /**** Fully cleared hash ****/
+    printf("    Testing to see if removing the final entry clears the entire hash...");
+    fflush(stdout);
+    hash_clear(words_hash, buffer);
+    if ( words_hash == NULL ) {  printf("Yes hash ptr is %p\n", words_hash);  }
+    else
+    {
+        printf("NO!  Running stats...\n");
+        i = j = k = 0;
+        tmp_ptr = NULL;
+        hash_stats(words_hash, &i, &j, &k, &tmp_ptr);
+        printf("        Depth = %d, Tables = %d, Entries = %d, Nulls : %d, Sparseness = %f, Max pointer = %p\n", \
+            hash_depth(words_hash), i, j, k, hash_sparseness(words_hash), tmp_ptr);
+    }
 
+
+    
 
 //    hash_dump(myhash);
 
