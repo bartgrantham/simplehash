@@ -121,7 +121,7 @@ int hash_set_depth(hash_entry * h[], const char * key, const void * value, int d
     {
         if ( (*h)[i].key = malloc(strlen(key)+1) )
         {
-            strcpy((*h)[i].key, key);
+            strlcpy((*h)[i].key, key, HASH_MAX_KEYSIZE+1);
             (*h)[i].value = (void *)value;
             return HASH_INSERT;
         }
