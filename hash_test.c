@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <time.h>
 
-#ifdef __linux
+#if defined(linux) || defined(__linux)
 #define TIMESTART clock_gettime(CLOCK_REALTIME, &tp_start);
 #define TIMEEND   clock_gettime(CLOCK_REALTIME, &tp_end); \
     elapsed = tp_end.tv_sec - tp_start.tv_sec; \
